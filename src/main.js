@@ -10,10 +10,12 @@ import {generateFilm} from "./mock/film";
 // import {createFilmDetailsTemplate} from "./view/film-details.js";
 // import {generateComments} from "./mock/comments";
 import {generateFilter} from "./mock/filter.js";
+import {getRandomInteger} from "./utils.js";
 
-const FILM_CARD_COUNT = 15;
+const FILM_CARD_COUNT = 19;
 const FILM_CARD_COUNT_EXTRA = 2;
 // const FILM_COMMENTS_COUNT = 5;
+const FILM_COUNT_PER_STEP = 5;
 
 const films = new Array(FILM_CARD_COUNT).fill().map(generateFilm);
 // const comments = new Array(FILM_COMMENTS_COUNT).fill().map(generateComments);
@@ -37,11 +39,29 @@ const filmsElement = mainElement.querySelector(`.films`);
 const filmsListElement = filmsElement.querySelector(`.films-list`);
 const filmsListContainerElement = filmsListElement.querySelector(`.films-list__container`);
 
-for (let i = 0; i < FILM_CARD_COUNT; i++) {
+for (let i = 0; i < Math.min(films.length, FILM_COUNT_PER_STEP); i++) {
   render(filmsListContainerElement, createFilmCardTemplate(films[i]), `beforeend`);
 }
 
-render(filmsListElement, createShowMoreButtonTemplate(), `beforeend`);
+if (films.length > FILM_COUNT_PER_STEP) {
+  let renderedFilmCount = FILM_COUNT_PER_STEP;
+
+  render(filmsListElement, createShowMoreButtonTemplate(), `beforeend`);
+
+  const showMoreButton = filmsListElement.querySelector(`.films-list__show-more`);
+
+  showMoreButton.addEventListener(`click`, (evt) => {
+    evt.preventDefault();
+    films.slice(renderedFilmCount, renderedFilmCount + FILM_COUNT_PER_STEP).forEach((film) => render(filmsListContainerElement, createFilmCardTemplate(film), `beforeend`));
+
+    renderedFilmCount += FILM_COUNT_PER_STEP;
+
+    if (renderedFilmCount >= films.length) {
+      showMoreButton.remove();
+    }
+  });
+}
+
 
 render(filmsElement, createRatedFilmsListContainerTemplate(), `beforeend`);
 
@@ -61,6 +81,10 @@ for (let i = 0; i < FILM_CARD_COUNT_EXTRA; i++) {
   render(commentedFilmsListContainerElement, createFilmCardTemplate(films[i]), `beforeend`);
 }
 
-// const footerElement = document.querySelector(`.footer`);
+const footerElement = document.querySelector(`.footer`);
+const footerStatisticsElement = footerElement.querySelector(`.footer__statistics`);
+
+render(footerStatisticsElement, `<p>` + getRandomInteger(1, 100000) + ` movies inside</p>`, `beforeend`);
+
 
 // render(footerElement, createFilmDetailsTemplate(films[0], comments, FILM_COMMENTS_COUNT), `afterend`);
