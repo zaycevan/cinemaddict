@@ -1,31 +1,46 @@
-const getRandomInteger = (a = 0, b = 1) => {
-  const lower = Math.ceil(Math.min(a, b));
-  const upper = Math.floor(Math.max(a, b));
+import {getRandomInteger, getRandomItem} from "../utils.js";
 
-  return Math.floor(lower + Math.random() * (upper - lower + 1));
+const generateFilmTitle = () => {
+  const TITLE = [
+    `The Dance of Life`,
+    `Sagebrush Trail`,
+    `The Man with the Golden Arm`,
+    `Santa Claus Conquers the Martians`
+  ];
+
+  return getRandomItem(TITLE);
 };
 
-const getRandomItem = (array) => {
-  const randomIndex = getRandomInteger(0, array.length - 1);
+const generateReleaseDate = () => {
+  const releaseDate = new Date();
 
-  return array[randomIndex];
+  releaseDate.setHours(23, 59, 59, 999);
+  releaseDate.setFullYear(getRandomInteger(1920, 1980), getRandomInteger(0, 11), getRandomInteger(1, 31));
+
+  return releaseDate.toLocaleString(`en-GB`, {day: `numeric`, month: `long`, year: `numeric`});
 };
 
 const generateFilmDuration = () => {
-  const filmDuration = getRandomInteger(0, 3) + `h ` + getRandomInteger(0, 59) + `m`;
+  const filmDuration = getRandomInteger(1, 3) + `h ` + getRandomInteger(0, 59) + `m`;
 
   return filmDuration;
 };
 
 const generateFilmGenre = () => {
-  const genre = [
+  const GENRE = [
     `Musical`,
     `Western`,
     `Drama`,
     `Comedy`
   ];
+  const randomGenresSet = new Set();
 
-  return getRandomItem(genre);
+  for (let i = 0; i < getRandomInteger(1, GENRE.length); i++) {
+    randomGenresSet.add(getRandomItem(GENRE));
+  }
+  const randomGenresArray = Array.from(randomGenresSet);
+
+  return randomGenresArray;
 };
 
 const generateFilmPoster = () => {
@@ -39,8 +54,8 @@ const generateFilmPoster = () => {
   return getRandomItem(poster);
 };
 
-const generateDescription = () => {
-  const descriptions = [
+const generateFilmDescription = () => {
+  const DESCRIPTIONS = [
     `Lorem ipsum dolor sit amet, consectetur adipiscing elit.`,
     `Cras aliquet varius magna, non porta ligula feugiat eget.`,
     `Fusce tristique felis at fermentum pharetra.`,
@@ -56,21 +71,33 @@ const generateDescription = () => {
   const randomDescriptions = new Set();
 
   for (let i = 0; i < getRandomInteger(1, 5); i++) {
-    randomDescriptions.add(getRandomItem(descriptions));
+    randomDescriptions.add(getRandomItem(DESCRIPTIONS));
   }
 
   return Array.from(randomDescriptions).join(` `);
 };
 
-export const generateFilmCard = () => {
+export const generateFilm = () => {
+
   return {
-    title: `The Dance of Life`,
+    title: generateFilmTitle(),
+    titleOriginal: generateFilmTitle(),
     poster: generateFilmPoster(),
-    rating: getRandomInteger(0, 10),
+    rating: (Math.random() * 10).toFixed(1),
+    director: `Anthony Mann`,
+    writers: `Anne Wigton, Heinz Herald`,
+    actors: `Erich von Stroheim, Mary Beth Hughes`,
+    releaseDate: generateReleaseDate(),
     year: getRandomInteger(1920, 1980),
     duration: generateFilmDuration(),
-    genre: generateFilmGenre(),
-    description: generateDescription(),
-    comments: getRandomInteger(1, 5)
+    country: `Russia`,
+    genres: generateFilmGenre(),
+    description: generateFilmDescription(),
+    ageRating: getRandomInteger(12, 18),
+    commentsCount: getRandomInteger(1, 5),
+    addToWatchlist: Boolean(getRandomInteger(0, 1)),
+    isWatched: Boolean(getRandomInteger(0, 1)),
+    isFavorite: Boolean(getRandomInteger(0, 1))
   };
 };
+
