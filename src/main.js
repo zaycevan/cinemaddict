@@ -20,7 +20,6 @@ const FILM_COUNT_PER_STEP = 5;
 const films = new Array(FILM_CARD_COUNT).fill().map(generateFilm);
 // const comments = new Array(FILM_COMMENTS_COUNT).fill().map(generateComments);
 const filters = generateFilter(films);
-const statistics = `<p>` + getRandomInteger(1, 100000) + ` movies inside</p>`;
 
 const render = (container, template, place) => {
   container.insertAdjacentHTML(place, template);
@@ -85,7 +84,7 @@ for (let i = 0; i < FILM_CARD_COUNT_EXTRA; i++) {
 const footerElement = document.querySelector(`.footer`);
 const footerStatisticsElement = footerElement.querySelector(`.footer__statistics`);
 
-render(footerStatisticsElement, statistics, `beforeend`);
+render(footerStatisticsElement, `<p>` + getRandomInteger(1, 100000) + ` movies inside</p>`, `beforeend`);
 
 
 // render(footerElement, createFilmDetailsTemplate(films[0], comments, FILM_COMMENTS_COUNT), `afterend`);
