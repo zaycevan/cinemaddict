@@ -1,3 +1,5 @@
+import {createElement} from "../utils.js";
+
 const isFilmControlActive = (filmControl) => {
   if (!filmControl) {
     return ``;
@@ -23,7 +25,7 @@ const createCommentsTemplate = (comment) => {
           </li>`;
 };
 
-export const createFilmDetailsTemplate = (film, comments, commentsCount) => {
+const createFilmDetailsTemplate = (film, comments, commentsCount) => {
   const {title, titleOriginal, poster, rating, director, writers, actors, releaseDate, duration, country, genres, description, ageRating, addToWatchlist, isWatched, isFavorite} = film;
 
   const genreName = (genres.length === 1) ? `Genre` : `Genres`;
@@ -151,3 +153,28 @@ export const createFilmDetailsTemplate = (film, comments, commentsCount) => {
     </section>`
   );
 };
+
+export default class FilmDetails {
+  constructor(film, comments, commentsCount) {
+    this._film = film;
+    this._comments = comments;
+    this._commentsCount = commentsCount;
+    this._element = null;
+  }
+
+  getTemplate() {
+    return createFilmDetailsTemplate(this._film, this._comments, this._commentsCount);
+  }
+
+  getElement() {
+    if (!this._element) {
+      this._element = createElement(this.getTemplate());
+    }
+
+    return this._element;
+  }
+
+  removeElement() {
+    this._element = null;
+  }
+}

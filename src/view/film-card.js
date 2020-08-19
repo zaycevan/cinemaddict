@@ -1,3 +1,5 @@
+import {createElement} from "../utils.js";
+
 const isFilmControlActive = (filmControl) => {
   if (!filmControl) {
     return ``;
@@ -5,7 +7,7 @@ const isFilmControlActive = (filmControl) => {
   return `film-card__controls-item--active`;
 };
 
-export const createFilmCardTemplate = (film) => {
+const createFilmCardTemplate = (film) => {
   const {title, rating, year, duration, genres, poster, description, commentsCount, addToWatchlist, isWatched, isFavorite} = film;
 
   let shortDescription = description;
@@ -33,3 +35,26 @@ export const createFilmCardTemplate = (film) => {
     </article>`
   );
 };
+
+export default class FilmCard {
+  constructor(film) {
+    this._film = film;
+    this._element = null;
+  }
+
+  getTemplate() {
+    return createFilmCardTemplate(this._film);
+  }
+
+  getElement() {
+    if (!this._element) {
+      this._element = createElement(this.getTemplate());
+    }
+
+    return this._element;
+  }
+
+  removeElement() {
+    this._element = null;
+  }
+}
