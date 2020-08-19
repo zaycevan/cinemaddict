@@ -8,13 +8,14 @@ import FilmCardView from "./view/film-card.js";
 import ShowMoreButtonView from "./view/show-more-button.js";
 import RatedFilmsListView from "./view/rated-films-list.js";
 import CommentedFilmsListView from "./view/commented-films-list.js";
+import FilmStatisticsView from "./view/film-statistics.js";
 import {generateFilm} from "./mock/film";
 import FilmDetailsView from "./view/film-details.js";
 import {generateComments} from "./mock/comments";
 import {generateFilter} from "./mock/filter.js";
-import {render, renderTemplate, RenderPosition, getRandomInteger} from "./utils.js";
+import {render, RenderPosition} from "./utils.js";
 
-const FILM_CARD_COUNT = 19;
+const FILM_CARD_COUNT = 11;
 const FILM_CARD_COUNT_EXTRA = 2;
 const FILM_COMMENTS_COUNT = 5;
 const FILM_COUNT_PER_STEP = 5;
@@ -22,7 +23,6 @@ const FILM_COUNT_PER_STEP = 5;
 const films = new Array(FILM_CARD_COUNT).fill().map(generateFilm);
 const comments = new Array(FILM_COMMENTS_COUNT).fill().map(generateComments);
 const filters = generateFilter(films);
-const statistics = `<p>` + getRandomInteger(1, 100000) + ` movies inside</p>`;
 
 const siteHeaderElement = document.querySelector(`.header`);
 
@@ -125,8 +125,12 @@ const ratedFilmsListComponent = new FilmsListContainerView();
 
 render(ratedFilmsList.getElement(), ratedFilmsListComponent.getElement(), RenderPosition.BEFOREEND);
 
+const ratedFilms = films.slice().sort(function (left, right) {
+  return right.rating - left.rating;
+});
+
 for (let i = 0; i < FILM_CARD_COUNT_EXTRA; i++) {
-  renderFilm(ratedFilmsListComponent.getElement(), films[i]);
+  renderFilm(ratedFilmsListComponent.getElement(), ratedFilms[i]);
 }
 
 const commentedFilmsList = new CommentedFilmsListView();
@@ -137,11 +141,14 @@ const commentedFilmsListComponent = new FilmsListContainerView();
 
 render(commentedFilmsList.getElement(), commentedFilmsListComponent.getElement(), RenderPosition.BEFOREEND);
 
+const commentedFilms = films.slice().sort(function (left, right) {
+  return right.commentsCount - left.commentsCount;
+});
+
 for (let i = 0; i < FILM_CARD_COUNT_EXTRA; i++) {
-  renderFilm(commentedFilmsListComponent.getElement(), films[i]);
+  renderFilm(commentedFilmsListComponent.getElement(), commentedFilms[i]);
 }
 
-const footerElement = document.querySelector(`.footer`);
-const footerStatisticsElement = footerElement.querySelector(`.footer__statistics`);
+const footerStatisticsElement = document.querySelector(`.footer__statistics`);
 
-renderTemplate(footerStatisticsElement, statistics, `beforeend`);
+render(footerStatisticsElement, new FilmStatisticsView().getElement(), RenderPosition.BEFOREEND);
