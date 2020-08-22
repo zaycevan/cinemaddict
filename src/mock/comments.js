@@ -1,4 +1,4 @@
-import {getRandomInteger, getRandomItem} from "../utils.js";
+import {getRandomInteger, getRandomItem} from "../utils/common.js";
 
 const generateCommentEmoji = () => {
   const emoji = [
