@@ -1,4 +1,4 @@
-import {createElement} from "../utils.js";
+import AbstractView from "./abstract.js";
 
 const isFilmControlActive = (filmControl) => {
   if (!filmControl) {
@@ -25,9 +25,10 @@ const createCommentsTemplate = (comment) => {
           </li>`;
 };
 
-const createFilmDetailsTemplate = (film, comments, commentsCount) => {
+const createFilmDetailsTemplate = (film, comments) => {
   const {title, titleOriginal, poster, rating, director, writers, actors, releaseDate, duration, country, genres, description, ageRating, addToWatchlist, isWatched, isFavorite} = film;
 
+  const commentsCount = comments.length;
   const genreName = (genres.length === 1) ? `Genre` : `Genres`;
 
   const genresTemplate = genres.map((genre) => `<span class="film-details__genre">${genre}</span>`).join(``);
@@ -154,27 +155,26 @@ const createFilmDetailsTemplate = (film, comments, commentsCount) => {
   );
 };
 
-export default class FilmDetails {
-  constructor(film, comments, commentsCount) {
+export default class FilmDetails extends AbstractView {
+  constructor(film, comments) {
+    super();
     this._film = film;
     this._comments = comments;
-    this._commentsCount = commentsCount;
-    this._element = null;
+
+    this._closeClickHandler = this._closeClickHandler.bind(this);
   }
 
   getTemplate() {
-    return createFilmDetailsTemplate(this._film, this._comments, this._commentsCount);
+    return createFilmDetailsTemplate(this._film, this._comments);
   }
 
-  getElement() {
-    if (!this._element) {
-      this._element = createElement(this.getTemplate());
-    }
-
-    return this._element;
+  _closeClickHandler(evt) {
+    evt.preventDefault();
+    this._callback.click();
   }
 
-  removeElement() {
-    this._element = null;
+  setCloseClickHandler(callback) {
+    this._callback.click = callback;
+    this.getElement().querySelector(`.film-details__close-btn`).addEventListener(`click`, this._closeClickHandler);
   }
 }

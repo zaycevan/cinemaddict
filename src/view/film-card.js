@@ -1,4 +1,4 @@
-import {createElement} from "../utils.js";
+import AbstractView from "./abstract.js";
 
 const isFilmControlActive = (filmControl) => {
   if (!filmControl) {
@@ -36,25 +36,27 @@ const createFilmCardTemplate = (film) => {
   );
 };
 
-export default class FilmCard {
+export default class FilmCard extends AbstractView {
   constructor(film) {
+    super();
     this._film = film;
-    this._element = null;
+
+    this._cardClickHandler = this._cardClickHandler.bind(this);
   }
 
   getTemplate() {
     return createFilmCardTemplate(this._film);
   }
 
-  getElement() {
-    if (!this._element) {
-      this._element = createElement(this.getTemplate());
-    }
-
-    return this._element;
+  _cardClickHandler(evt) {
+    evt.preventDefault();
+    this._callback.click();
   }
 
-  removeElement() {
-    this._element = null;
+  setCardClickHandler(callback) {
+    this._callback.click = callback;
+    this.getElement().querySelector(`.film-card__title`).addEventListener(`click`, this._cardClickHandler);
+    this.getElement().querySelector(`.film-card__poster`).addEventListener(`click`, this._cardClickHandler);
+    this.getElement().querySelector(`.film-card__comments`).addEventListener(`click`, this._cardClickHandler);
   }
 }
