@@ -1,6 +1,5 @@
 import UserProfileView from "./view/user-profile.js";
 import FilterView from "./view/filter.js";
-import SortView from "./view/sort.js";
 import FilmStatisticsView from "./view/film-statistics.js";
 import {generateFilm} from "./mock/film";
 import {generateComments} from "./mock/comments";
@@ -23,7 +22,6 @@ const movieListPresenter = new MovieListPresenter(siteMainElement);
 
 render(siteHeaderElement, new UserProfileView(), RenderPosition.BEFOREEND);
 render(siteMainElement, new FilterView(filters), RenderPosition.BEFOREEND);
-render(siteMainElement, new SortView(), RenderPosition.BEFOREEND);
 
 movieListPresenter.init(films, comments);
 
