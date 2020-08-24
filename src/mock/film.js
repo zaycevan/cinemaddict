@@ -17,7 +17,7 @@ const generateReleaseDate = () => {
   releaseDate.setHours(23, 59, 59, 999);
   releaseDate.setFullYear(getRandomInteger(1920, 1980), getRandomInteger(0, 11), getRandomInteger(1, 31));
 
-  return releaseDate.toLocaleString(`en-GB`, {day: `numeric`, month: `long`, year: `numeric`});
+  return new Date(releaseDate);
 };
 
 const generateFilmDuration = () => {
@@ -88,7 +88,6 @@ export const generateFilm = () => {
     writers: `Anne Wigton, Heinz Herald`,
     actors: `Erich von Stroheim, Mary Beth Hughes`,
     releaseDate: generateReleaseDate(),
-    year: getRandomInteger(1920, 1980),
     duration: generateFilmDuration(),
     country: `Russia`,
     genres: generateFilmGenre(),

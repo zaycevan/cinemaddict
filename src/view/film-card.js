@@ -8,7 +8,7 @@ const isFilmControlActive = (filmControl) => {
 };
 
 const createFilmCardTemplate = (film) => {
-  const {title, rating, year, duration, genres, poster, description, commentsCount, addToWatchlist, isWatched, isFavorite} = film;
+  const {title, rating, releaseDate, duration, genres, poster, description, commentsCount, addToWatchlist, isWatched, isFavorite} = film;
 
   let shortDescription = description;
   if (description.length > 140) {
@@ -20,7 +20,7 @@ const createFilmCardTemplate = (film) => {
       <h3 class="film-card__title">${title}</h3>
       <p class="film-card__rating">${rating}</p>
       <p class="film-card__info">
-        <span class="film-card__year">${year}</span>
+        <span class="film-card__year">${releaseDate.getFullYear()}</span>
         <span class="film-card__duration">${duration}</span>
         <span class="film-card__genre">${genres[0]}</span>
       </p>
