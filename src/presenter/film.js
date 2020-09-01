@@ -19,7 +19,7 @@ export default class Film {
     this._escKeyDownHandler = this._escKeyDownHandler.bind(this);
   }
 
-  init(film, comments) {
+  renderFilm(film, comments) {
     this._film = film;
     this._comments = comments;
 

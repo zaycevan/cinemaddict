@@ -56,13 +56,13 @@ export default class MovieList {
     this._sourcedBoardFilms = updateItem(this._sourcedBoardFilms, updatedFilm);
 
     if (this._filmPresenter.hasOwnProperty(updatedFilm.id)) {
-      this._filmPresenter[updatedFilm.id].init(updatedFilm, this._comments);
+      this._filmPresenter[updatedFilm.id].renderFilm(updatedFilm, this._comments);
     }
     if (this._filmPresenterRated.hasOwnProperty(updatedFilm.id)) {
-      this._filmPresenterRated[updatedFilm.id].init(updatedFilm, this._comments);
+      this._filmPresenterRated[updatedFilm.id].renderFilm(updatedFilm, this._comments);
     }
     if (this._filmPresenterCommented.hasOwnProperty(updatedFilm.id)) {
-      this._filmPresenterCommented[updatedFilm.id].init(updatedFilm, this._comments);
+      this._filmPresenterCommented[updatedFilm.id].renderFilm(updatedFilm, this._comments);
     }
   }
 
@@ -98,7 +98,7 @@ export default class MovieList {
 
   _renderFilm(film, filmListContainer) {
     const filmPresenter = new FilmPresenter(filmListContainer, this._handleFilmChange);
-    filmPresenter.init(film, this._comments);
+    filmPresenter.renderFilm(film, this._comments);
     switch (filmListContainer) {
       case this._ratedFilmsListComponent:
         this._filmPresenterRated[film.id] = filmPresenter;

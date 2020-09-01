@@ -1,4 +1,4 @@
-import AbstractView from "./abstract.js";
+import AbstractSmartComponent from "./abstract-smart-component.js";
 
 const isFilmControlActive = (filmControl) => {
   if (!filmControl) {
@@ -155,7 +155,7 @@ const createFilmDetailsTemplate = (film, comments) => {
   );
 };
 
-export default class FilmDetails extends AbstractView {
+export default class FilmDetails extends AbstractSmartComponent {
   constructor(film, comments) {
     super();
     this._film = film;
@@ -165,10 +165,24 @@ export default class FilmDetails extends AbstractView {
     this._toWatchlistClickHandler = this._toWatchlistClickHandler.bind(this);
     this._watchedClickHandler = this._watchedClickHandler.bind(this);
     this._favoriteClickHandler = this._favoriteClickHandler.bind(this);
+    // this._commentInputHandler = this._commentInputHandler.bind(this);
+    this._emojiClickHandler = this._emojiClickHandler.bind(this);
+
+    this._setInnerHandlers();
   }
 
   getTemplate() {
     return createFilmDetailsTemplate(this._film, this._comments);
+  }
+
+  restoreHandlers() {
+    this._setInnerHandlers();
+  }
+
+  _setInnerHandlers() {
+    this.getElement()
+      .querySelector(`.film-details__emoji-list`)
+      .addEventListener(`click`, this._emojiClickHandler);
   }
 
   _closeClickHandler(evt) {
@@ -189,6 +203,31 @@ export default class FilmDetails extends AbstractView {
   _favoriteClickHandler(evt) {
     evt.preventDefault();
     this._callback.favoriteClick();
+  }
+
+  _emojiClickHandler(evt) {
+    evt.preventDefault();
+    const newEmojiContainer = this.getElement().querySelector(`.film-details__add-emoji-label`);
+    const src = evt.target.src;
+    const index = src.lastIndexOf(`/`);
+    let fileName;
+    if (index === -1) {
+      fileName = src;
+    } else {
+      fileName = src.substring(index + 1);
+    }
+
+    this.updateData(fileName);
+
+    if (evt.target && evt.target.tagName.toLowerCase() === `img`) {
+      if (newEmojiContainer.children.length) {
+        newEmojiContainer.removeChild(newEmojiContainer.firstChild);
+      }
+      const selectedEmoji = evt.target.cloneNode();
+      selectedEmoji.setAttribute(`width`, `55`);
+      selectedEmoji.setAttribute(`height`, `55`);
+      newEmojiContainer.appendChild(selectedEmoji);
+    }
   }
 
   setCloseClickHandler(callback) {
