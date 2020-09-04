@@ -1,12 +1,10 @@
 import AbstractView from "./abstract.js";
 
-export default class AbstractSmartComponent extends AbstractView {
+export default class Smart extends AbstractView {
   constructor() {
     super();
 
-    if (new.target === AbstractSmartComponent) {
-      throw new Error(`Can't instantiate AbstractSmartComponent, only concrete one.`);
-    }
+    this._data = {};
   }
 
   restoreHandlers() {
@@ -26,14 +24,20 @@ export default class AbstractSmartComponent extends AbstractView {
     this.restoreHandlers();
   }
 
-  updateData(newEmoji) {
-    if (!newEmoji) {
+  updateData(update, justDataUpdating) {
+    if (!update) {
       return;
     }
 
-    this._comments = this._comments.push({
-      emoji: newEmoji
-    });
+    this._data = Object.assign(
+        {},
+        this._data,
+        update
+    );
+
+    if (justDataUpdating) {
+      return;
+    }
 
     this.updateElement();
   }

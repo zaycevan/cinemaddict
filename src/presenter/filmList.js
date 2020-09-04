@@ -38,6 +38,7 @@ export default class MovieList {
     this._showMoreButtonComponent = new ShowMoreButtonView();
 
     this._handleFilmChange = this._handleFilmChange.bind(this);
+    this._handleModeChange = this._handleModeChange.bind(this);
     this._handleShowMoreButtonClick = this._handleShowMoreButtonClick.bind(this);
     this._handleSortTypeChange = this._handleSortTypeChange.bind(this);
   }
@@ -56,14 +57,26 @@ export default class MovieList {
     this._sourcedBoardFilms = updateItem(this._sourcedBoardFilms, updatedFilm);
 
     if (this._filmPresenter.hasOwnProperty(updatedFilm.id)) {
-      this._filmPresenter[updatedFilm.id].renderFilm(updatedFilm, this._comments);
+      this._filmPresenter[updatedFilm.id].renderFilmCard(updatedFilm, this._comments);
     }
     if (this._filmPresenterRated.hasOwnProperty(updatedFilm.id)) {
-      this._filmPresenterRated[updatedFilm.id].renderFilm(updatedFilm, this._comments);
+      this._filmPresenterRated[updatedFilm.id].renderFilmCard(updatedFilm, this._comments);
     }
     if (this._filmPresenterCommented.hasOwnProperty(updatedFilm.id)) {
-      this._filmPresenterCommented[updatedFilm.id].renderFilm(updatedFilm, this._comments);
+      this._filmPresenterCommented[updatedFilm.id].renderFilmCard(updatedFilm, this._comments);
     }
+  }
+
+  _handleModeChange() {
+    Object
+      .values(this._filmPresenter)
+      .forEach((presenter) => presenter.resetView());
+    Object
+      .values(this._filmPresenterRated)
+      .forEach((presenter) => presenter.resetView());
+    Object
+      .values(this._filmPresenterCommented)
+      .forEach((presenter) => presenter.resetView());
   }
 
   _sortFilms(sortType) {
@@ -97,8 +110,8 @@ export default class MovieList {
   }
 
   _renderFilm(film, filmListContainer) {
-    const filmPresenter = new FilmPresenter(filmListContainer, this._handleFilmChange);
-    filmPresenter.renderFilm(film, this._comments);
+    const filmPresenter = new FilmPresenter(filmListContainer, this._handleFilmChange, this._handleModeChange);
+    filmPresenter.renderFilmCard(film, this._comments);
     switch (filmListContainer) {
       case this._ratedFilmsListComponent:
         this._filmPresenterRated[film.id] = filmPresenter;

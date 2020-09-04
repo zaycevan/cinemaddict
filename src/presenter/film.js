@@ -3,13 +3,20 @@ import FilmDetailsView from "../view/film-details.js";
 
 import {render, RenderPosition, replace, remove} from "../utils/render.js";
 
+const Mode = {
+  DEFAULT: `DEFAULT`,
+  EDITING: `EDITING`
+};
+
 export default class Film {
-  constructor(filmListContainer, changeData) {
+  constructor(filmListContainer, changeData, changeMode) {
     this._filmListContainer = filmListContainer;
     this._changeData = changeData;
+    this._changeMode = changeMode;
 
     this._filmComponent = null;
     this._filmDetailsComponent = null;
+    this._mode = Mode.DEFAULT;
 
     this._handleCardClick = this._handleCardClick.bind(this);
     this._handleToWatchlistClick = this._handleToWatchlistClick.bind(this);
@@ -19,7 +26,7 @@ export default class Film {
     this._escKeyDownHandler = this._escKeyDownHandler.bind(this);
   }
 
-  renderFilm(film, comments) {
+  renderFilmCard(film, comments) {
     this._film = film;
     this._comments = comments;
 
@@ -44,11 +51,11 @@ export default class Film {
       return;
     }
 
-    if (this._filmListContainer.getElement().contains(prevFilmComponent.getElement())) {
+    if (this._mode === Mode.DEFAULT) {
       replace(this._filmComponent, prevFilmComponent);
     }
 
-    if (document.body.contains(prevFilmDetailsComponent.getElement())) {
+    if (this._mode === Mode.EDITING) {
       replace(this._filmDetailsComponent, prevFilmDetailsComponent);
     }
 
@@ -61,16 +68,23 @@ export default class Film {
     remove(this._filmDetailsComponent);
   }
 
+  resetView() {
+    if (this._mode !== Mode.DEFAULT) {
+      this._closeFilmDetails();
+    }
+  }
+
   _showFilmDetails() {
     document.body.appendChild(this._filmDetailsComponent.getElement());
-
     document.addEventListener(`keydown`, this._escKeyDownHandler);
+    this._changeMode();
+    this._mode = Mode.EDITING;
   }
 
   _closeFilmDetails() {
     document.body.removeChild(this._filmDetailsComponent.getElement());
-
     document.removeEventListener(`keydown`, this._escKeyDownHandler);
+    this._mode = Mode.DEFAULT;
   }
 
   _escKeyDownHandler(evt) {
