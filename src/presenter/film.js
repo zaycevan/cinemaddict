@@ -1,6 +1,5 @@
 import FilmCardView from "../view/film-card.js";
 import FilmDetailsView from "../view/film-details.js";
-
 import {render, RenderPosition, replace, remove} from "../utils/render.js";
 
 const Mode = {
@@ -51,11 +50,11 @@ export default class Film {
       return;
     }
 
-    if (this._mode === Mode.DEFAULT) {
+    if (this._filmListContainer.getElement().contains(prevFilmComponent.getElement())) {
       replace(this._filmComponent, prevFilmComponent);
     }
 
-    if (this._mode === Mode.EDITING) {
+    if (document.body.contains(prevFilmDetailsComponent.getElement())) {
       replace(this._filmDetailsComponent, prevFilmDetailsComponent);
     }
 
@@ -83,6 +82,7 @@ export default class Film {
 
   _closeFilmDetails() {
     document.body.removeChild(this._filmDetailsComponent.getElement());
+
     document.removeEventListener(`keydown`, this._escKeyDownHandler);
     this._mode = Mode.DEFAULT;
   }
