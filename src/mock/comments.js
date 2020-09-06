@@ -36,11 +36,9 @@ const generateCommentDate = () => {
   const currentDate = new Date();
 
   currentDate.setHours(getRandomInteger(0, 23), getRandomInteger(0, 59), getRandomInteger(0, 59), 999);
-  currentDate.setFullYear(getRandomInteger(2018, 2020), getRandomInteger(0, 11), getRandomInteger(1, 31));
+  currentDate.setFullYear(2020, getRandomInteger(6, 8), getRandomInteger(1, 6));
 
-  const commentDate = currentDate.getFullYear() + `/` + (currentDate.getMonth() + 1) + `/` + currentDate.getDate() + ` ` + currentDate.getHours() + `:` + currentDate.getMinutes();
-
-  return commentDate;
+  return new Date(currentDate);
 };
 
 export const generateComments = () => {
