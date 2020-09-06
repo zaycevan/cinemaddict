@@ -23,7 +23,7 @@ const generateReleaseDate = () => {
 };
 
 const generateFilmDuration = () => {
-  const filmDuration = getRandomInteger(1, 3) + `h ` + getRandomInteger(0, 59) + `m`;
+  const filmDuration = getRandomInteger(60, 180);
 
   return filmDuration;
 };

@@ -1,4 +1,5 @@
 import SmartView from "./smart.js";
+import {formatDuration, formatReleaseDate, formatCommentDate} from "../utils/film.js";
 // import {createElement} from "../utils/render.js";
 
 const isFilmControlActive = (filmControl) => {
@@ -19,7 +20,7 @@ const createCommentsTemplate = (comment) => {
               <p class="film-details__comment-text">${text}</p>
               <p class="film-details__comment-info">
                 <span class="film-details__comment-author">${author}</span>
-                <span class="film-details__comment-day">${date}</span>
+                <span class="film-details__comment-day">${formatCommentDate(date)}</span>
                 <button class="film-details__comment-delete">Delete</button>
               </p>
             </div>
@@ -114,11 +115,11 @@ const createFilmDetailsTemplate = (film, comments, emoji, textComment) => {
                 </tr>
                 <tr class="film-details__row">
                   <td class="film-details__term">Release Date</td>
-                  <td class="film-details__cell">${releaseDate.toLocaleString(`en-GB`, {day: `numeric`, month: `long`, year: `numeric`})}</td>
+                  <td class="film-details__cell">${formatReleaseDate(releaseDate)}</td>
                 </tr>
                 <tr class="film-details__row">
                   <td class="film-details__term">Runtime</td>
-                  <td class="film-details__cell">${duration}</td>
+                  <td class="film-details__cell">${formatDuration(duration)}</td>
                 </tr>
                 <tr class="film-details__row">
                   <td class="film-details__term">Country</td>
