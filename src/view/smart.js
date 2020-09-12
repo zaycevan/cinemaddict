@@ -24,21 +24,21 @@ export default class Smart extends AbstractView {
     this.restoreHandlers();
   }
 
-  updateData(update, justDataUpdating) {
-    if (!update) {
-      return;
-    }
+  // updateData(update, justDataUpdating) {
+  //   if (!update) {
+  //     return;
+  //   }
 
-    this._data = Object.assign(
-        {},
-        this._data,
-        update
-    );
+  //   this._data = Object.assign(
+  //       {},
+  //       this._data,
+  //       update
+  //   );
 
-    if (justDataUpdating) {
-      return;
-    }
+  //   if (justDataUpdating) {
+  //     return;
+  //   }
 
-    this.updateElement();
-  }
+  //   this.updateElement();
+  // }
 }
