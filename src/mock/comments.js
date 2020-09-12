@@ -1,5 +1,7 @@
 import {getRandomInteger, getRandomItem} from "../utils/common.js";
 
+const generateId = () => Date.now() + parseInt(Math.random() * 10000, 10);
+
 const generateCommentEmoji = () => {
   const emoji = [
     `smile.png`,
@@ -43,9 +45,10 @@ const generateCommentDate = () => {
 
 export const generateComments = () => {
   return {
-    emoji: generateCommentEmoji(),
-    text: generateCommentText(),
+    id: generateId(),
     author: generateCommentAthor(),
+    text: generateCommentText(),
     date: generateCommentDate(),
+    emoji: generateCommentEmoji(),
   };
 };
