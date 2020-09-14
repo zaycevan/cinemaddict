@@ -14,31 +14,33 @@ export default class Smart extends AbstractView {
   updateElement() {
     let prevElement = this.getElement();
     const parent = prevElement.parentElement;
+    const scrollPosition = prevElement.scrollTop;
     this.removeElement();
 
     const newElement = this.getElement();
 
     parent.replaceChild(newElement, prevElement);
-    prevElement = null;
-
     this.restoreHandlers();
+
+    newElement.scrollTop = scrollPosition;
+    prevElement = null;
   }
 
-  updateData(update, justDataUpdating) {
-    if (!update) {
-      return;
-    }
+  // updateData(update, justDataUpdating) {
+  //   if (!update) {
+  //     return;
+  //   }
 
-    this._data = Object.assign(
-        {},
-        this._data,
-        update
-    );
+  //   this._data = Object.assign(
+  //       {},
+  //       this._data,
+  //       update
+  //   );
 
-    if (justDataUpdating) {
-      return;
-    }
+  //   if (justDataUpdating) {
+  //     return;
+  //   }
 
-    this.updateElement();
-  }
+  //   this.updateElement();
+  // }
 }

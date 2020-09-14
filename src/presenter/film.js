@@ -1,10 +1,12 @@
 import FilmCardView from "../view/film-card.js";
 import FilmDetailsView from "../view/film-details.js";
 import {render, RenderPosition, replace, remove} from "../utils/render.js";
+import {generateId} from "../utils/common.js";
+import {UserAction, UpdateType} from "../const.js";
 
 const Mode = {
   DEFAULT: `DEFAULT`,
-  EDITING: `EDITING`
+  POPUP: `POPUP`
 };
 
 export default class Film {
@@ -18,11 +20,13 @@ export default class Film {
     this._mode = Mode.DEFAULT;
 
     this._handleCardClick = this._handleCardClick.bind(this);
+    this._handleFormSubmit = this._handleFormSubmit.bind(this);
     this._handleToWatchlistClick = this._handleToWatchlistClick.bind(this);
     this._handleWatchedClick = this._handleWatchedClick.bind(this);
     this._handleFavoriteClick = this._handleFavoriteClick.bind(this);
     this._handleCloseClick = this._handleCloseClick.bind(this);
     this._escKeyDownHandler = this._escKeyDownHandler.bind(this);
+    this._handleDeleteClick = this._handleDeleteClick.bind(this);
   }
 
   renderFilmCard(film, comments) {
@@ -32,8 +36,8 @@ export default class Film {
     const prevFilmComponent = this._filmComponent;
     const prevFilmDetailsComponent = this._filmDetailsComponent;
 
-    this._filmComponent = new FilmCardView(film);
-    this._filmDetailsComponent = new FilmDetailsView(film, comments);
+    this._filmComponent = new FilmCardView(this._film, this._comments.length);
+    this._filmDetailsComponent = new FilmDetailsView(this._film, this._comments);
 
     this._filmComponent.setCardClickHandler(this._handleCardClick);
     this._filmComponent.setToWatchlistClickHandler(this._handleToWatchlistClick);
@@ -41,9 +45,11 @@ export default class Film {
     this._filmComponent.setFavoriteClickHandler(this._handleFavoriteClick);
 
     this._filmDetailsComponent.setCloseClickHandler(this._handleCloseClick);
+    this._filmDetailsComponent.setFormSubmitHandler(this._handleFormSubmit);
     this._filmDetailsComponent.setToWatchlistClickHandler(this._handleToWatchlistClick);
     this._filmDetailsComponent.setWatchedClickHandler(this._handleWatchedClick);
     this._filmDetailsComponent.setFavoriteClickHandler(this._handleFavoriteClick);
+    this._filmDetailsComponent.setDeleteClickHandler(this._handleDeleteClick);
 
     if (prevFilmComponent === null || prevFilmDetailsComponent === null) {
       render(this._filmListContainer, this._filmComponent, RenderPosition.BEFOREEND);
@@ -73,15 +79,24 @@ export default class Film {
     }
   }
 
-  _showFilmDetails() {
+  getMode() {
+    return {
+      id: this._film.id,
+      mode: this._mode
+    };
+  }
+
+  showFilmDetails() {
     document.body.appendChild(this._filmDetailsComponent.getElement());
+    this._filmDetailsComponent.restoreHandlers();
     document.addEventListener(`keydown`, this._escKeyDownHandler);
     this._changeMode();
-    this._mode = Mode.EDITING;
+    this._mode = Mode.POPUP;
   }
 
   _closeFilmDetails() {
-    document.body.removeChild(this._filmDetailsComponent.getElement());
+    remove(this._filmDetailsComponent);
+    this._filmDetailsComponent.resetNewComment();
 
     document.removeEventListener(`keydown`, this._escKeyDownHandler);
     this._mode = Mode.DEFAULT;
@@ -95,11 +110,30 @@ export default class Film {
   }
 
   _handleCardClick() {
-    this._showFilmDetails();
+    this.showFilmDetails();
   }
+
+  _handleFormSubmit(emojiName, textComment) {
+    const newComment = {
+      id: generateId(),
+      text: textComment,
+      date: new Date(),
+      emoji: emojiName
+    };
+
+    this._changeData(
+        UserAction.ADD_COMMENT,
+        UpdateType.MINOR,
+        this._film,
+        newComment
+    );
+  }
+
 
   _handleToWatchlistClick() {
     this._changeData(
+        UserAction.UPDATE_FILM,
+        UpdateType.MINOR,
         Object.assign(
             {},
             this._film,
@@ -112,6 +146,8 @@ export default class Film {
 
   _handleWatchedClick() {
     this._changeData(
+        UserAction.UPDATE_FILM,
+        UpdateType.MINOR,
         Object.assign(
             {},
             this._film,
@@ -124,6 +160,8 @@ export default class Film {
 
   _handleFavoriteClick() {
     this._changeData(
+        UserAction.UPDATE_FILM,
+        UpdateType.MINOR,
         Object.assign(
             {},
             this._film,
@@ -131,6 +169,18 @@ export default class Film {
               isFavorite: !this._film.isFavorite
             }
         )
+    );
+  }
+
+  _handleDeleteClick(commentId) {
+    const id = parseInt(commentId, 10);
+    const index = this._comments.findIndex((comment) => comment.id === id);
+
+    this._changeData(
+        UserAction.DELETE_COMMENT,
+        UpdateType.MINOR,
+        this._film,
+        this._comments[index]
     );
   }
 
