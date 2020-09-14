@@ -1,6 +1,4 @@
-import {getRandomInteger, getRandomItem} from "../utils/common.js";
-
-const generateId = () => Date.now() + parseInt(Math.random() * 10000, 10);
+import {getRandomInteger, getRandomItem, generateId} from "../utils/common.js";
 
 const generateFilmTitle = () => {
   const TITLE = [

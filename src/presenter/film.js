@@ -1,6 +1,7 @@
 import FilmCardView from "../view/film-card.js";
 import FilmDetailsView from "../view/film-details.js";
 import {render, RenderPosition, replace, remove} from "../utils/render.js";
+import {generateId} from "../utils/common.js";
 import {UserAction, UpdateType} from "../const.js";
 
 const Mode = {
@@ -114,9 +115,10 @@ export default class Film {
 
   _handleFormSubmit(emojiName, textComment) {
     const newComment = {
-      comment: textComment,
+      id: generateId(),
+      text: textComment,
       date: new Date(),
-      emotion: emojiName
+      emoji: emojiName
     };
 
     this._changeData(

@@ -15,7 +15,7 @@ const createCommentsTemplate = (filmId, comment) => {
 
   return `<li class="film-details__comment">
             <span class="film-details__comment-emoji">
-              <img src="./images/emoji/${emoji}" width="55" height="55" alt="emoji-smile">
+              <img src="./images/emoji/${emoji}.png" width="55" height="55" alt="emoji-smile">
             </span>
             <div>
               <p class="film-details__comment-text">${text ? he.encode(text) : ``}</p>
@@ -255,7 +255,7 @@ export default class FilmDetails extends SmartView {
   }
 
   _formSubmitHandler(evt) {
-    if (evt.key === `Enter` && evt.ctrlKey) {
+    if (evt.key === `Enter` && (evt.ctrlKey || evt.metaKey)) {
       evt.preventDefault();
       if (!this._emoji || !this._textComment) {
         throw new Error(`Can't submit`);

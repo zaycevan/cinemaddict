@@ -34,6 +34,7 @@ export default class MovieList {
     this._filmPresenterCommentedModes = [];
     this._sortComponent = null;
     this._showMoreButtonComponent = null;
+    this._scrollTop = null;
 
     this._filmsBoard = new FilmsBoardView();
     this._filmsList = new FilmsListView();
@@ -229,6 +230,7 @@ export default class MovieList {
 
   _clearBoard({resetRenderedFilmCount = false, resetSortType = false} = {}) {
     const filmCount = this._getFilms().length;
+    this._scrollTop = document.scrollTop;
 
     Object
       .values(this._filmPresenter)

@@ -4,10 +4,10 @@ const generateId = () => Date.now() + parseInt(Math.random() * 10000, 10);
 
 const generateCommentEmoji = () => {
   const emoji = [
-    `smile.png`,
-    `sleeping.png`,
-    `puke.png`,
-    `angry.png`
+    `smile`,
+    `sleeping`,
+    `puke`,
+    `angry`
   ];
 
   return getRandomItem(emoji);
