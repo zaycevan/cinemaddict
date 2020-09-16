@@ -34,7 +34,6 @@ export default class MovieList {
     this._filmPresenterCommentedModes = [];
     this._sortComponent = null;
     this._showMoreButtonComponent = null;
-    this._scrollTop = null;
 
     this._filmsBoard = new FilmsBoardView();
     this._filmsList = new FilmsListView();
@@ -50,14 +49,22 @@ export default class MovieList {
     this._handleModeChange = this._handleModeChange.bind(this);
     this._handleShowMoreButtonClick = this._handleShowMoreButtonClick.bind(this);
     this._handleSortTypeChange = this._handleSortTypeChange.bind(this);
+  }
+
+  init() {
+    this._renderBoard();
 
     this._filterModel.addObserver(this._handleModelEvent);
     this._filmsModel.addObserver(this._handleModelEvent);
     this._commentsModel.addObserver(this._handleModelEvent);
   }
 
-  init() {
-    this._renderBoard();
+  destroy() {
+    this._clearBoard({resetRenderedFilmCount: true, resetSortType: true});
+
+    this._filterModel.removeObserver(this._handleModelEvent);
+    this._filmsModel.removeObserver(this._handleModelEvent);
+    this._commentsModel.removeObserver(this._handleModelEvent);
   }
 
   _getFilms() {
@@ -112,7 +119,7 @@ export default class MovieList {
         this._renderBoard();
         break;
       case UpdateType.MAJOR:
-        this._clearBoard({resetRenderedFilmCount: true, resetSortType: true, resetFilmMode: true});
+        this._clearBoard({resetRenderedFilmCount: true, resetSortType: true});
         this._renderBoard();
         break;
     }
@@ -230,7 +237,6 @@ export default class MovieList {
 
   _clearBoard({resetRenderedFilmCount = false, resetSortType = false} = {}) {
     const filmCount = this._getFilms().length;
-    this._scrollTop = document.scrollTop;
 
     Object
       .values(this._filmPresenter)
@@ -257,6 +263,13 @@ export default class MovieList {
     remove(this._sortComponent);
     remove(this._noFilmComponent);
     remove(this._showMoreButtonComponent);
+    remove(this._filmsBoard);
+    remove(this._filmsList);
+    remove(this._filmsListComponent);
+    remove(this._ratedFilmsList);
+    remove(this._ratedFilmsListComponent);
+    remove(this._commentedFilmsList);
+    remove(this._commentedFilmsListComponent);
 
     if (resetRenderedFilmCount) {
       this._renderedFilmCount = FILM_COUNT_PER_STEP;

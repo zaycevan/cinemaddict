@@ -40,6 +40,7 @@ const createFilmCardTemplate = (film, commentsCount) => {
 export default class FilmCard extends AbstractView {
   constructor(film, commentsCount) {
     super();
+
     this._film = film;
     this._commentsCount = commentsCount;
 

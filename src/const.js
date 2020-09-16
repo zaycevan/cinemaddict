@@ -1,3 +1,10 @@
+export const UserRank = {
+  ZERO: ``,
+  NOVICE: `Novice`,
+  FAN: `Fan`,
+  MOVIE_BUFF: `Movie Buff`
+};
+
 export const SortType = {
   DEFAULT: `default`,
   DATE: `date`,
@@ -20,4 +27,32 @@ export const FilterType = {
   WATCHLIST: `watchlist`,
   HISTORY: `history`,
   FAVORITES: `favorites`
+};
+
+export const MainNavigationItem = {
+  FILMS: `Films`,
+  STATISTICS: `Stats`
+};
+
+export const StatisticsPeriod = {
+  ALL_TIME: {
+    name: `All time`,
+    value: `all-time`
+  },
+  TODAY: {
+    name: `Today`,
+    value: `day`
+  },
+  WEEK: {
+    name: `Week`,
+    value: `week`
+  },
+  MONTH: {
+    name: `Month`,
+    value: `month`
+  },
+  YEAR: {
+    name: `Year`,
+    value: `year`
+  }
 };
