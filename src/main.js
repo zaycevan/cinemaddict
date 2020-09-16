@@ -1,8 +1,8 @@
 import UserProfileView from "./view/user-profile.js";
-import FilmStatisticsView from "./view/film-statistics.js";
+import FooterStatisticsView from "./view/footer-statistics.js";
 import {generateFilm} from "./mock/film";
 import {generateComments} from "./mock/comments";
-import FilterPresenter from "./presenter/filter.js";
+import MainNavigationPresenter from "./presenter/mainNavigation.js";
 import FilmListPresenter from "./presenter/filmList.js";
 import FilterModel from "./model/filter.js";
 import FilmsModel from "./model/films.js";
@@ -27,12 +27,12 @@ const siteHeaderElement = document.querySelector(`.header`);
 const siteMainElement = document.querySelector(`.main`);
 const siteFooterStatistics = document.querySelector(`.footer__statistics`);
 
-render(siteHeaderElement, new UserProfileView(), RenderPosition.BEFOREEND);
+render(siteHeaderElement, new UserProfileView(filmsModel.getFilms()), RenderPosition.BEFOREEND);
 
-const filterPresenter = new FilterPresenter(siteMainElement, filterModel, filmsModel);
 const filmListPresenter = new FilmListPresenter(siteMainElement, filmsModel, commentsModel, filterModel);
+const mainNavigationPresenter = new MainNavigationPresenter(siteMainElement, filterModel, filmsModel, filmListPresenter);
 
-filterPresenter.init();
+mainNavigationPresenter.init();
 filmListPresenter.init();
 
-render(siteFooterStatistics, new FilmStatisticsView(films), RenderPosition.BEFOREEND);
+render(siteFooterStatistics, new FooterStatisticsView(films), RenderPosition.BEFOREEND);

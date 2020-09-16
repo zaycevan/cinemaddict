@@ -20,6 +20,15 @@ const generateReleaseDate = () => {
   return new Date(releaseDate);
 };
 
+const generateWatchingDate = () => {
+  const releaseDate = new Date();
+
+  releaseDate.setHours(23, 59, 59, 999);
+  releaseDate.setFullYear(getRandomInteger(2019, 2020), getRandomInteger(0, 8), getRandomInteger(1, 15));
+
+  return new Date(releaseDate);
+};
+
 const generateFilmDuration = () => {
   const filmDuration = getRandomInteger(60, 180);
 
@@ -97,6 +106,7 @@ export const generateFilm = () => {
     commentsCount: getRandomInteger(1, 5),
     addToWatchlist: Boolean(getRandomInteger(0, 1)),
     isWatched: Boolean(getRandomInteger(0, 1)),
+    watchingDate: generateWatchingDate(),
     isFavorite: Boolean(getRandomInteger(0, 1))
   };
 };
