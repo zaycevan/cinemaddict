@@ -8,9 +8,10 @@ const isFilmControlActive = (filmControl) => {
   return `film-card__controls-item--active`;
 };
 
-const createFilmCardTemplate = (film, commentsCount) => {
-  const {title, rating, releaseDate, duration, genres, poster, description, addToWatchlist, isWatched, isFavorite} = film;
+const createFilmCardTemplate = (film) => {
+  const {title, rating, releaseDate, duration, genres, poster, description, addToWatchlist, isWatched, isFavorite, commentsId} = film;
 
+  const commentsCount = commentsId.length;
   let shortDescription = description;
   if (description.length > 140) {
     shortDescription = description.slice(0, 139) + `...`;
@@ -25,7 +26,7 @@ const createFilmCardTemplate = (film, commentsCount) => {
         <span class="film-card__duration">${formatDuration(duration)}</span>
         <span class="film-card__genre">${genres[0]}</span>
       </p>
-      <img src="./images/posters/${poster}" alt="" class="film-card__poster">
+      <img src="./${poster}" alt="" class="film-card__poster">
       <p class="film-card__description">${shortDescription}</p>
       <a class="film-card__comments">${commentsCount} comments</a>
       <form class="film-card__controls">

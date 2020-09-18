@@ -36,7 +36,7 @@ export default class Film {
     const prevFilmComponent = this._filmComponent;
     const prevFilmDetailsComponent = this._filmDetailsComponent;
 
-    this._filmComponent = new FilmCardView(this._film, this._comments.length);
+    this._filmComponent = new FilmCardView(this._film);
     this._filmDetailsComponent = new FilmDetailsView(this._film, this._comments);
 
     this._filmComponent.setCardClickHandler(this._handleCardClick);
@@ -145,6 +145,11 @@ export default class Film {
   }
 
   _handleWatchedClick() {
+    if (!this._film.isWatched) {
+      this._film.watchingDate = new Date();
+    } else {
+      this._film.watchingDate = null;
+    }
     this._changeData(
         UserAction.UPDATE_FILM,
         UpdateType.MINOR,
