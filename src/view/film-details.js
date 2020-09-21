@@ -323,7 +323,6 @@ export default class FilmDetails extends SmartView {
   _commentDeleteClickHandler(evt) {
     evt.preventDefault();
     if (evt.target && evt.target.classList.contains(`film-details__comment-delete`)) {
-
       this._callback.deleteClick(evt.target.dataset.commentId);
     }
   }

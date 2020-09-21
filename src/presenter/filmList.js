@@ -116,7 +116,7 @@ export default class MovieList {
     }
   }
 
-  _handleModelEvent(updateType, film) {
+  _handleModelEvent(updateType) {
     switch (updateType) {
       case UpdateType.MINOR:
         this._clearBoard();
@@ -130,9 +130,6 @@ export default class MovieList {
         this._isLoading = false;
         this._clearBoard({resetRenderedFilmCount: true, resetSortType: true});
         this._renderBoard();
-        break;
-      case UpdateType.INIT_POPUP:
-        this._filmPresenter[film.id].showFilmDetails();
         break;
     }
   }

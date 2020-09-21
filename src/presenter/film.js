@@ -19,6 +19,7 @@ export default class Film {
 
     this._filmComponent = null;
     this._filmDetailsComponent = null;
+    this._comments = null;
     this._mode = Mode.DEFAULT;
 
     this._handleCardClick = this._handleCardClick.bind(this);
@@ -75,8 +76,9 @@ export default class Film {
 
   showFilmDetails() {
     const prevFilmDetailsComponent = this._filmDetailsComponent;
+    this._comments = this._commentsModel.getComments();
 
-    this._filmDetailsComponent = new FilmDetailsView(this._film, this._commentsModel.getComments());
+    this._filmDetailsComponent = new FilmDetailsView(this._film, this._comments);
 
     this._filmDetailsComponent.setCloseClickHandler(this._handleCloseClick);
     this._filmDetailsComponent.setFormSubmitHandler(this._handleFormSubmit);
@@ -85,7 +87,7 @@ export default class Film {
     this._filmDetailsComponent.setFavoriteClickHandler(this._handleFavoriteClick);
     this._filmDetailsComponent.setDeleteClickHandler(this._handleDeleteClick);
 
-    if (document.body.contains(prevFilmDetailsComponent.getElement())) {
+    if (prevFilmDetailsComponent !== null) {
       replace(this._filmDetailsComponent, prevFilmDetailsComponent);
     }
 
@@ -105,7 +107,6 @@ export default class Film {
         this.showFilmDetails();
       })
       .catch(() => {
-        console.log(`z`);
         this.showFilmDetails();
       });
   }
@@ -194,8 +195,7 @@ export default class Film {
   }
 
   _handleDeleteClick(commentId) {
-    const id = parseInt(commentId, 10);
-    const index = this._comments.findIndex((comment) => comment.id === id);
+    const index = this._comments.findIndex((comment) => comment.id === commentId);
 
     this._changeData(
         UserAction.DELETE_COMMENT,
