@@ -30,12 +30,6 @@ filmListPresenter.init();
 api.getFilms()
   .then((films) => {
     filmsModel.setFilms(UpdateType.INIT, films);
-    films.map((film) => {
-      api.getComments(film.id).
-      then((comments) => {
-        commentsModel.setComments(UpdateType.INIT, comments);
-      });
-    });
     render(siteHeaderElement, new UserProfileView(filmsModel.getFilms()), RenderPosition.BEFOREEND);
     render(siteFooterStatistics, new FooterStatisticsView(filmsModel.getFilms()), RenderPosition.BEFOREEND);
   })

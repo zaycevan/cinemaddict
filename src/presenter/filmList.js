@@ -116,7 +116,7 @@ export default class MovieList {
     }
   }
 
-  _handleModelEvent(updateType) {
+  _handleModelEvent(updateType, film) {
     switch (updateType) {
       case UpdateType.MINOR:
         this._clearBoard();
@@ -130,6 +130,9 @@ export default class MovieList {
         this._isLoading = false;
         this._clearBoard({resetRenderedFilmCount: true, resetSortType: true});
         this._renderBoard();
+        break;
+      case UpdateType.INIT_POPUP:
+        this._filmPresenter[film.id].showFilmDetails();
         break;
     }
   }
@@ -176,8 +179,8 @@ export default class MovieList {
   }
 
   _renderFilm(film, filmListContainer, modes) {
-    const filmPresenter = new FilmPresenter(filmListContainer, this._handleViewAction, this._handleModeChange);
-    filmPresenter.renderFilmCard(film, this._commentsModel.getComments());
+    const filmPresenter = new FilmPresenter(filmListContainer, this._handleViewAction, this._handleModeChange, this._commentsModel, this._api);
+    filmPresenter.renderFilmCard(film);
     this._restoreMode(filmPresenter, film, modes);
 
     switch (filmListContainer) {
