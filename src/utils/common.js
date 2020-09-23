@@ -10,5 +10,3 @@ export const getRandomItem = (array) => {
 
   return array[randomIndex];
 };
-
-export const generateId = () => Date.now() + parseInt(Math.random() * 10000, 10);

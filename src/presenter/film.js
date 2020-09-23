@@ -1,12 +1,18 @@
 import FilmCardView from "../view/film-card.js";
 import FilmDetailsView from "../view/film-details.js";
 import {render, RenderPosition, replace, remove} from "../utils/render.js";
-import {generateId} from "../utils/common.js";
 import {UserAction, UpdateType} from "../const.js";
 
 const Mode = {
   DEFAULT: `DEFAULT`,
   POPUP: `POPUP`
+};
+
+export const State = {
+  SAVING: `SAVING`,
+  DELETING: `DELETING`,
+  ABORTING_ADD: `ABORTING_ADD`,
+  ABORTING_DELETE: `ABORTING_DELETE`,
 };
 
 export default class Film {
@@ -74,6 +80,27 @@ export default class Film {
     };
   }
 
+  setViewState(state, commentId) {
+    switch (state) {
+      case State.SAVING:
+        this._filmDetailsComponent.disableForm();
+        break;
+      case State.DELETING:
+        this._filmDetailsComponent.updateDeleting(commentId, {isDeleting: true});
+        break;
+      case State.ABORTING_ADD:
+        this._filmDetailsComponent.shakeForm();
+        break;
+      case State.ABORTING_DELETE:
+        this._filmDetailsComponent.shakeComment(commentId);
+        break;
+    }
+  }
+
+  setAborting() {
+    this._filmDetailsComponent.shakeForm();
+  }
+
   showFilmDetails() {
     const prevFilmDetailsComponent = this._filmDetailsComponent;
     this._comments = this._commentsModel.getComments();
@@ -89,6 +116,8 @@ export default class Film {
 
     if (prevFilmDetailsComponent !== null) {
       replace(this._filmDetailsComponent, prevFilmDetailsComponent);
+      // replace(this._taskComponent, prevTaskEditComponent);
+      // this._mode = Mode.DEFAULT;
     }
 
     remove(prevFilmDetailsComponent);
@@ -132,7 +161,6 @@ export default class Film {
 
   _handleFormSubmit(emojiName, textComment) {
     const newComment = {
-      id: generateId(),
       text: textComment,
       date: new Date(),
       emoji: emojiName
