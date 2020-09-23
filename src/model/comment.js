@@ -14,11 +14,8 @@ export default class Comments extends Observer {
     return this._comments;
   }
 
-  addComment(updateType, updateFilm, updateComment) {
-    this._comments = [
-      ...this._comments,
-      updateComment
-    ];
+  addComment(updateType, updateFilm, updateComments) {
+    this._comments = updateComments;
 
     this._notify(updateType, updateFilm);
   }
@@ -56,20 +53,10 @@ export default class Comments extends Observer {
   }
 
   static adaptToServer(comment) {
-    const adaptedComment = Object.assign(
-        {},
-        comment,
-        {
-          "comment": comment.text,
-          "date": comment.date instanceof Date ? comment.date.toISOString() : null,
-          "emotion": comment.emoji
-        }
-    );
-
-    delete comment.text;
-    delete comment.date;
-    delete comment.emoji;
-
-    return adaptedComment;
+    return {
+      "comment": comment.text,
+      "date": comment.date instanceof Date ? comment.date.toISOString() : null,
+      "emotion": comment.emoji
+    };
   }
 }

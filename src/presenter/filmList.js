@@ -7,7 +7,7 @@ import FilmsListContainerView from "../view/films-list-container.js";
 import ShowMoreButtonView from "../view/show-more-button.js";
 import RatedFilmsListView from "../view/rated-films-list.js";
 import CommentedFilmsListView from "../view/commented-films-list.js";
-import FilmPresenter from "./film.js";
+import FilmPresenter, {State as FilmPresenterViewState} from "./film.js";
 import {render, RenderPosition, remove} from "../utils/render.js";
 import {sortFilmData, sortFilmRating} from "../utils/film.js";
 import {filter} from "../utils/filter.js";
@@ -96,7 +96,7 @@ export default class MovieList {
     return this._filmsModel.getFilms()
     .slice()
     .sort(function (left, right) {
-      return right.commentsCount - left.commentsCount;
+      return right.commentsId.length - left.commentsId.length;
     });
   }
 
@@ -108,10 +108,26 @@ export default class MovieList {
         });
         break;
       case UserAction.ADD_COMMENT:
-        this._commentsModel.addComment(updateType, updateFilm, updateComment);
+        this._filmPresenter[updateFilm.id].setViewState(FilmPresenterViewState.SAVING);
+        this._api.addComment(updateFilm, updateComment)
+        .then((response) => this._commentsModel.addComment(updateType, updateFilm, response))
+        .then(this._api.updateFilm(updateFilm)
+        .then((response) => this._filmsModel.updateFilm(updateType, response)))
+        .catch(() => {
+          this._filmPresenter[updateFilm.id].setViewState(FilmPresenterViewState.ABORTING_ADD, updateComment.id);
+        });
         break;
       case UserAction.DELETE_COMMENT:
-        this._commentsModel.deleteComment(updateType, updateFilm, updateComment);
+        this._filmPresenter[updateFilm.id].setViewState(FilmPresenterViewState.DELETING, updateComment.id);
+        this._api.deleteComment(updateComment)
+        .then(() => {
+          this._commentsModel.deleteComment(updateType, updateFilm, updateComment);
+        })
+        .then(this._api.updateFilm(updateFilm)
+        .then((response) => this._filmsModel.updateFilm(updateType, response)))
+        .catch(() => {
+          this._filmPresenter[updateFilm.id].setViewState(FilmPresenterViewState.ABORTING_DELETE, updateComment.id);
+        });
         break;
     }
   }
