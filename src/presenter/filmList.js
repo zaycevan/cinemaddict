@@ -17,12 +17,13 @@ const FILM_COUNT_PER_STEP = 5;
 const FILM_CARD_COUNT_EXTRA = 2;
 
 export default class MovieList {
-  constructor(boardContainer, filmsModel, commentsModel, filterModel, api) {
+  constructor(boardContainer, filmsModel, commentsModel, filterModel, api, apiWithProvider) {
     this._boardContainer = boardContainer;
     this._filterModel = filterModel;
     this._filmsModel = filmsModel;
     this._commentsModel = commentsModel;
     this._api = api;
+    this._apiWithProvider = apiWithProvider;
 
     this._renderedFilmCount = FILM_COUNT_PER_STEP;
     this._currentSortType = SortType.DEFAULT;
@@ -103,7 +104,7 @@ export default class MovieList {
   _handleViewAction(actionType, updateType, updateFilm, updateComment) {
     switch (actionType) {
       case UserAction.UPDATE_FILM:
-        this._api.updateFilm(updateFilm).then((response) => {
+        this._apiWithProvider.updateFilm(updateFilm).then((response) => {
           this._filmsModel.updateFilm(updateType, response);
         });
         break;

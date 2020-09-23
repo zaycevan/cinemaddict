@@ -1,7 +1,7 @@
 import he from "he";
 import SmartView from "./smart.js";
 import {formatDuration, formatReleaseDate, formatCommentDate} from "../utils/film.js";
-// import {createElement} from "../utils/render.js";
+import {createElement} from "../utils/render.js";
 
 const isFilmControlActive = (filmControl) => {
   if (!filmControl) {
@@ -49,9 +49,9 @@ const createEmojiTemplate = (emoji) => {
   return `<img src="./images/emoji/${emojiName}.png" width="55" height="55" alt="emoji-${emojiName}">`;
 };
 
-// const createEmojiElement = (emoji) => {
-//   return createElement(createEmojiTemplate(emoji));
-// };
+const createEmojiElement = (emoji) => {
+  return createElement(createEmojiTemplate(emoji));
+};
 
 const isEmojiChecked = (emojiType, emojiSelected) => {
   if (!emojiSelected) {
@@ -352,8 +352,8 @@ export default class FilmDetails extends SmartView {
         newEmojiContainer.removeChild(newEmojiContainer.firstChild);
       }
       this._emoji = evt.target.src;
-      this.updateElement();
-      // newEmojiContainer.appendChild(createEmojiElement(this._emoji));
+      // this.updateElement();
+      newEmojiContainer.appendChild(createEmojiElement(this._emoji));
     }
   }
 

@@ -116,8 +116,6 @@ export default class Film {
 
     if (prevFilmDetailsComponent !== null) {
       replace(this._filmDetailsComponent, prevFilmDetailsComponent);
-      // replace(this._taskComponent, prevTaskEditComponent);
-      // this._mode = Mode.DEFAULT;
     }
 
     remove(prevFilmDetailsComponent);
@@ -136,7 +134,9 @@ export default class Film {
         this.showFilmDetails();
       })
       .catch(() => {
+        this._commentsModel.setComments([]);
         this.showFilmDetails();
+        this._filmDetailsComponent.disableForm();
       });
   }
 
