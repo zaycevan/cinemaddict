@@ -248,8 +248,10 @@ export default class FilmDetails extends SmartView {
 
   disableForm() {
     const textarea = this.getElement().querySelector(`.film-details__comment-input`);
+    const form = this.getElement().querySelector(`.form-details__bottom-container`);
 
     textarea.disabled = true;
+    form.style.pointerEvents = `none`;
   }
 
   shakeForm() {
@@ -352,7 +354,6 @@ export default class FilmDetails extends SmartView {
         newEmojiContainer.removeChild(newEmojiContainer.firstChild);
       }
       this._emoji = evt.target.src;
-      // this.updateElement();
       newEmojiContainer.appendChild(createEmojiElement(this._emoji));
     }
   }

@@ -77,11 +77,10 @@ export default class MovieList {
 
     switch (this._currentSortType) {
       case SortType.DATE:
-        return filtredFilms.sort(sortFilmData);
+        return filtredFilms.slice().sort(sortFilmData);
       case SortType.RATING:
-        return filtredFilms.sort(sortFilmRating);
+        return filtredFilms.slice().sort(sortFilmRating);
     }
-
     return filtredFilms;
   }
 
@@ -256,15 +255,27 @@ export default class MovieList {
   _renderRatedFilmList() {
     const renderedExtraFilmCount = (FILM_CARD_COUNT_EXTRA < this._getFilms().length) ? FILM_CARD_COUNT_EXTRA : this._getFilms().length;
     const films = this._getRatedFilms().slice(0, renderedExtraFilmCount);
+    const ratingsNotZero = this._getRatedFilms().some((film) => film.rating > 0);
 
-    this._renderRatedFilms(films);
+    if (ratingsNotZero) {
+      this._renderRatedFilms(films);
+    } else {
+      remove(this._ratedFilmsList);
+      remove(this._ratedFilmsListComponent);
+    }
   }
 
   _renderCommentedFilmList() {
     const renderedExtraFilmCount = (FILM_CARD_COUNT_EXTRA < this._getFilms().length) ? FILM_CARD_COUNT_EXTRA : this._getFilms().length;
     const films = this._getCommentedFilms().slice(0, renderedExtraFilmCount);
+    const commentsNotZero = this._getRatedFilms().some((film) => film.commentsId.length > 0);
 
-    this._renderCommentedFilms(films);
+    if (commentsNotZero) {
+      this._renderCommentedFilms(films);
+    } else {
+      remove(this._commentedFilmsList);
+      remove(this._commentedFilmsListComponent);
+    }
   }
 
   _clearBoard({resetRenderedFilmCount = false, resetSortType = false} = {}) {
