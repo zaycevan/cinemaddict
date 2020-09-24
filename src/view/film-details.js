@@ -251,7 +251,7 @@ export default class FilmDetails extends SmartView {
     const form = this.getElement().querySelector(`.form-details__bottom-container`);
 
     textarea.disabled = true;
-    // form.style.pointerEvents = `none`;
+    form.style.pointerEvents = `none`;
   }
 
   shakeForm() {
