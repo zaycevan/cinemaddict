@@ -88,7 +88,7 @@ const createStatisticsFilterTemplate = (period, currentStatisticsPeriod) => {
 const createStatisticsTemplate = (films, watchedFilms, currentStatisticsPeriod) => {
 
   let statisticsFiltersTemplate = ``;
-  for (let period in StatisticsPeriod) {
+  for (const period in StatisticsPeriod) {
     if (period) {
       statisticsFiltersTemplate += createStatisticsFilterTemplate(StatisticsPeriod[period], currentStatisticsPeriod);
     }
