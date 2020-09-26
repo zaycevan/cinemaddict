@@ -1,6 +1,6 @@
 import moment from "moment";
 
-const compareTitles = function (titleA, titleB) {
+const compareTitles = (titleA, titleB) => {
   if (titleA > titleB) {
     return 1;
   } else if (titleA < titleB) {

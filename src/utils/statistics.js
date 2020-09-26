@@ -17,13 +17,13 @@ export const getWatchedFilmsDuringPeriod = (films, period) => {
 
 export const getUserRank = (films) => {
   const watchedFilms = getWatchedFilmsDuringPeriod(films, StatisticsPeriod.ALL_TIME.value);
-  const numberWatchedFilms = watchedFilms.length;
+  const watchedFilmsCount = watchedFilms.length;
 
-  if (numberWatchedFilms >= 1 && numberWatchedFilms <= 10) {
+  if (watchedFilmsCount >= 1 && watchedFilmsCount <= 10) {
     return UserRank.NOVICE;
-  } else if (numberWatchedFilms >= 11 && numberWatchedFilms <= 20) {
+  } else if (watchedFilmsCount >= 11 && watchedFilmsCount <= 20) {
     return UserRank.FAN;
-  } else if (numberWatchedFilms > 20) {
+  } else if (watchedFilmsCount > 20) {
     return UserRank.MOVIE_BUFF;
   }
   return UserRank.ZERO;
@@ -35,10 +35,10 @@ export const countFilmsByGenre = (films, genre) => {
   return films.filter((film) => film.genres.includes(genre)).length;
 };
 
-export const getGenresArray = (array, result = []) => {
+export const getGenres = (array, result = []) => {
   array.forEach((element) => {
     if (Array.isArray(element)) {
-      getGenresArray(element, result);
+      getGenres(element, result);
     } else {
       result.push(element);
     }
@@ -47,17 +47,17 @@ export const getGenresArray = (array, result = []) => {
 };
 
 export const getSortedGenres = (films) => {
-  const genresArray = films.map((film) => film.genres);
-  const filmGenres = getGenresArray(genresArray);
+  const genres = films.map((film) => film.genres);
+  const filmGenres = getGenres(genres);
   const uniqGenres = makeItemsUniq(filmGenres);
 
   const filmByGenreCounts = uniqGenres.map((genre) => countFilmsByGenre(films, genre));
 
-  const object = {};
+  const sortedGenreCounts = {};
 
   uniqGenres.forEach((element, index) => {
-    object[element] = filmByGenreCounts[index];
+    sortedGenreCounts[element] = filmByGenreCounts[index];
   });
 
-  return uniqGenres.sort((a, b) => object[b] - object[a]);
+  return uniqGenres.sort((a, b) => sortedGenreCounts[b] - sortedGenreCounts[a]);
 };

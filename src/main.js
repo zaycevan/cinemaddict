@@ -19,7 +19,7 @@ const STORE_NAME = `${STORE_PREFIX}-${STORE_VER}`;
 
 const siteHeaderElement = document.querySelector(`.header`);
 const siteMainElement = document.querySelector(`.main`);
-const siteFooterStatistics = document.querySelector(`.footer__statistics`);
+const siteFooterStatisticsElement = document.querySelector(`.footer__statistics`);
 
 const api = new Api(END_POINT, AUTHORIZATION);
 const store = new Store(STORE_NAME, window.localStorage);
@@ -38,21 +38,16 @@ apiWithProvider.getFilms()
   .then((films) => {
     filmsModel.setFilms(UpdateType.INIT, films);
     render(siteHeaderElement, new UserProfileView(filmsModel.getFilms()), RenderPosition.BEFOREEND);
-    render(siteFooterStatistics, new FooterStatisticsView(filmsModel.getFilms()), RenderPosition.BEFOREEND);
+    render(siteFooterStatisticsElement, new FooterStatisticsView(filmsModel.getFilms()), RenderPosition.BEFOREEND);
   })
   .catch(() => {
     filmsModel.setFilms(UpdateType.INIT, []);
     render(siteHeaderElement, new UserProfileView(filmsModel.getFilms()), RenderPosition.BEFOREEND);
-    render(siteFooterStatistics, new FooterStatisticsView(filmsModel.getFilms()), RenderPosition.BEFOREEND);
+    render(siteFooterStatisticsElement, new FooterStatisticsView(filmsModel.getFilms()), RenderPosition.BEFOREEND);
   });
 
 window.addEventListener(`load`, () => {
-  navigator.serviceWorker.register(`/sw.js`)
-    .then(() => {
-      console.log(`ServiceWorker available`); // eslint-disable-line
-    }).catch(() => {
-      console.error(`ServiceWorker isn't available`); // eslint-disable-line
-    });
+  navigator.serviceWorker.register(`/sw.js`);
 });
 
 window.addEventListener(`online`, () => {

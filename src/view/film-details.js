@@ -69,7 +69,7 @@ const createFilmDetailsTemplate = (film, commentsData, emoji, textComment) => {
   const {id, title, titleOriginal, poster, rating, director, writers, actors, releaseDate, duration, country, genres, description, ageRating, addToWatchlist, isWatched, isFavorite} = film;
 
   const commentsCount = commentsData.length;
-  const genreName = (genres.length === 1) ? `Genre` : `Genres`;
+  const genreName = (genres.length <= 1) ? `Genre` : `Genres`;
 
   const genresTemplate = genres.map((genre) => `<span class="film-details__genre">${genre}</span>`).join(``);
 

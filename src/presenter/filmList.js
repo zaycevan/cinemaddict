@@ -87,7 +87,7 @@ export default class MovieList {
   _getRatedFilms() {
     return this._filmsModel.getFilms()
     .slice()
-    .sort(function (left, right) {
+    .sort((left, right) => {
       return right.rating - left.rating;
     });
   }
@@ -95,7 +95,7 @@ export default class MovieList {
   _getCommentedFilms() {
     return this._filmsModel.getFilms()
     .slice()
-    .sort(function (left, right) {
+    .sort((left, right) => {
       return right.commentsId.length - left.commentsId.length;
     });
   }

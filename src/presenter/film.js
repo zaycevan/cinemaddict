@@ -134,7 +134,6 @@ export default class Film {
         this.showFilmDetails();
       })
       .catch(() => {
-        // this._commentsModel.setComments([]);
         this.showFilmDetails();
         this._filmDetailsComponent.disableForm();
       });
